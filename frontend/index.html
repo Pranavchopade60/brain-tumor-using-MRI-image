@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PSRD AI – Brain Tumor Detection</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <div class="bg"><i></i><i></i><i></i></div>
+
+    <nav>
+        <a class="logo" href="#top">🧠 PSRD<b>AI</b></a>
+        <div class="links"><a href="#scan">Analyze</a><a href="#types">Tumor Types</a><a href="#history">History</a></div>
+        <div class="nav-r">
+            <span class="status" id="status"><i></i><em>Checking…</em></span>
+            <button class="icon" id="theme" title="Toggle theme">🌓</button>
+            <button class="icon" id="gear" title="Settings">⚙️</button>
+        </div>
+    </nav>
+
+    <header class="hero" id="top">
+        <span class="badge">MobileNetV2 </span>
+        <h1>Brain tumor detection,<br /></h1>
+        <p>Upload an MRI scan. Get the tumor type, a confidence score and a heatmap showing exactly where the AI is looking.</p>
+        <a class="btn big" href="#scan">Start Analysis →</a>
+        <div class="chips"><span>🎯 4 classes</span><span>⚡ Instant results</span><span>🔥 Heatmap localization</span><span>📄 PDF report</span></div>
+    </header>
+
+    <main>
+        <section id="scan" class="grid">
+            <div class="card">
+                <h2>1 · Upload MRI</h2>
+                <label class="stage" id="drop">
+        <input type="file" id="file" accept="image/*" hidden />
+        <div id="ph"><div class="big-ic">🩻</div><p><b>Click to upload</b>, drag &amp; drop<br />or press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste</p><small>JPG / PNG · max 10 MB</small></div>
+        <img id="preview" alt="MRI preview" hidden />
+        <div class="scanline" id="scanline" hidden></div>
+      </label>
+                <div class="btns">
+                    <button class="btn" id="analyze" disabled>🔍 Analyze Scan</button>
+                    <button class="btn ghost" id="reset" disabled>Clear</button>
+                </div>
+            </div>
+            <div class="card">
+                <h2>2 · Result</h2>
+                <div id="result">
+                    <div class="empty">Results will appear here after analysis.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="cam" hidden>
+            <div class="cam-head">
+                <div>
+                    <h2>3 · Tumor Localization (Grad-CAM)</h2>
+                    <p class="muted" id="camInfo"></p>
+                </div>
+                <div class="seg"><button class="on" data-v="overlay">Overlay</button><button data-v="side">Side-by-Side</button></div>
+            </div>
+            <div class="stack" id="stack"><img id="camBase" alt="Original" /><img id="camTop" alt="Grad-CAM" /></div>
+            <div class="cam-tools">
+                <label>Heatmap intensity <input type="range" id="op" min="0" max="100" value="75" /></label>
+                <button class="btn ghost" id="zoom">🔎 Fullscreen</button>
+                <div class="legend"><span>Low</span>
+                    <div class="gradient"></div><span>High</span></div>
+            </div>
+        </section>
+
+        <section id="types">
+            <h2 class="sec">Tumor types the model recognizes</h2>
+            <div class="types" id="typeGrid"></div>
+        </section>
+
+        <section id="history" class="card">
+            <div class="cam-head">
+                <h2>Scan history</h2><button class="btn ghost" id="clearHist">🗑 Clear</button></div>
+            <div class="hist" id="hist"></div>
+        </section>
+
+        <p class="disclaimer">⚠️ Educational project – <b>not</b> a medical device. Results must not be used for diagnosis. Always consult a qualified doctor.</p>
+    </main>
+
+    <dialog id="setDlg">
+        <h3>Settings</h3><label>Backend API URL<input id="apiUrl" type="text" /></label>
+        <div class="btns"><button class="btn" id="saveApi">Save</button><button class="btn ghost" onclick="this.closest('dialog').close()">Close</button></div>
+    </dialog>
+    <dialog id="zoomDlg"><img id="zoomImg" alt="Grad-CAM" /><button class="btn ghost" onclick="this.closest('dialog').close()">Close</button></dialog>
+    <div id="toasts"></div>
+</body>
+
+</html>
